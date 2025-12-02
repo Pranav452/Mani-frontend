@@ -41,39 +41,48 @@ export default function CitiesPage() {
   const router = useRouter();
 
   const handleCityClick = (city: string) => {
-    console.log(`Navigating to ${city}`);
+    router.push(`/companies/${encodeURIComponent(city)}`);
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white flex flex-col">
       {/* Header */}
       <header className="bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between sticky top-0 z-10 shadow-sm">
         <div className="flex items-center gap-2 sm:gap-3">
-          <div className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center flex-shrink-0">
-            <svg
-              viewBox="0 0 40 40"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-full h-full"
-            >
-              <path
-                d="M10 10 L20 5 L30 10 L30 20 L20 25 L10 20 Z M10 20 L20 15 L30 20 L30 30 L20 35 L10 30 Z"
-                stroke="#2563eb"
-                strokeWidth="2"
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+          <div className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center flex-shrink-0 relative">
+            <Image
+              src="/logo.png"
+              alt="Manilal Patel Group Logo"
+              width={40}
+              height={40}
+              className="object-contain"
+            />
           </div>
           <h1 className="text-gray-900 text-base sm:text-xl font-semibold truncate">Manilal Patel Group</h1>
         </div>
-        <button
-          onClick={() => router.push("/")}
-          className="text-gray-600 hover:text-gray-900 transition-colors text-sm sm:text-base px-2 sm:px-0"
-        >
-          Logout
-        </button>
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center cursor-pointer hover:bg-gray-300 transition-colors">
+            <svg
+              className="w-5 h-5 text-gray-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+              />
+            </svg>
+          </div>
+          <button
+            onClick={() => router.push("/")}
+            className="text-gray-600 hover:text-gray-900 transition-colors text-sm sm:text-base px-2 sm:px-0"
+          >
+            Logout
+          </button>
+        </div>
       </header>
 
       {/* Cities Grid */}
@@ -150,6 +159,15 @@ export default function CitiesPage() {
           </div>
         </div>
       </div>
+
+      {/* Footer */}
+      <footer className="bg-gray-50 border-t border-gray-200 px-4 sm:px-6 py-3 mt-auto">
+        <div className="max-w-7xl mx-auto">
+          <p className="text-gray-600 text-xs sm:text-sm text-center">
+            Version 9.0.30729.1 ©2014 Manilal Patel Group. All Rights Reserved.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }

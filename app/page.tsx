@@ -56,25 +56,17 @@ export default function LoginPage() {
         <div className="flex-1 flex items-center justify-center p-6 sm:p-8 md:p-12">
           <div className="w-full max-w-md">
             {/* Company Logo and Name */}
-            <div className="flex items-center gap-3 mb-8">
-              <div className="w-10 h-10 flex items-center justify-center">
-                <svg
-                  viewBox="0 0 40 40"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-full h-full"
-                >
-                  <path
-                    d="M10 10 L20 5 L30 10 L30 20 L20 25 L10 20 Z M10 20 L20 15 L30 20 L30 30 L20 35 L10 30 Z"
-                    stroke="#2563eb"
-                    strokeWidth="2"
-                    fill="none"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
+            <div className="flex items-center gap-4 mb-10">
+              <div className="w-16 h-16 flex items-center justify-center relative">
+                <Image
+                  src="/logo.png"
+                  alt="Manilal Patel Group Logo"
+                  width={64}
+                  height={64}
+                  className="object-contain"
+                />
               </div>
-              <h1 className="text-gray-900 text-xl font-semibold">Manilal Patel Group</h1>
+              <h1 className="text-gray-900 text-2xl sm:text-3xl font-semibold">Manilal Patel Group</h1>
             </div>
 
             <h2 className="text-3xl font-bold text-gray-900 mb-2">
