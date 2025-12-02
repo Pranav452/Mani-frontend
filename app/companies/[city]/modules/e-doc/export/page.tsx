@@ -33,19 +33,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { FolderIcon } from "lucide-react";
@@ -144,6 +131,7 @@ function ExportDocumentsPageContent() {
     remark: string;
   }>>([]);
   const [isDragging, setIsDragging] = useState(false);
+  const [isListOpen, setIsListOpen] = useState(false);
 
   const filteredDocuments =
     selectedDocumentTitle === "ALL"
@@ -411,58 +399,52 @@ function ExportDocumentsPageContent() {
               <Label htmlFor="document" className="text-sm font-medium text-gray-700">
                 Document <span className="text-red-500">*</span>
               </Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    className="w-full justify-between font-normal h-10"
-                  >
-                    <span className="truncate">{uploadDocument || "--Select--"}</span>
-                    <svg
-                      className="ml-2 h-4 w-4 shrink-0 opacity-50"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 9l-7 7-7-7"
-                      />
-                    </svg>
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent 
-                  className="w-full p-0" 
-                  align="start"
-                  side="bottom"
-                  sideOffset={4}
-                  style={{ width: 'var(--radix-popover-trigger-width)' }}
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setIsListOpen(!isListOpen)}
+                  className="w-full flex items-center justify-between px-4 py-2 h-10 border border-gray-300 rounded-md bg-white hover:bg-gray-50 transition-colors text-left"
                 >
-                  <Command>
-                    <CommandInput placeholder="Search document..." className="h-9" />
-                    <CommandList className="max-h-[300px]">
-                      <CommandEmpty>No document found.</CommandEmpty>
-                      <CommandGroup>
-                        {documentTitles.map((title) => (
-                          <CommandItem
-                            key={title}
-                            value={title}
-                            onSelect={() => {
-                              setUploadDocument(title);
-                            }}
-                            className="cursor-pointer"
-                          >
-                            {title}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
+                  <span className="truncate text-sm text-gray-700">
+                    {uploadDocument || "--Select--"}
+                  </span>
+                  <svg
+                    className={`ml-2 h-4 w-4 shrink-0 text-gray-500 transition-transform ${
+                      isListOpen ? 'rotate-180' : ''
+                    }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+                {isListOpen && (
+                  <div className="absolute z-50 w-full mt-1 border border-gray-300 rounded-md bg-white shadow-lg max-h-[300px] overflow-y-auto">
+                    {documentTitles.map((title) => (
+                      <button
+                        key={title}
+                        type="button"
+                        onClick={() => {
+                          setUploadDocument(title);
+                          setIsListOpen(false);
+                        }}
+                        className={`
+                          w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors
+                          ${uploadDocument === title ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-700'}
+                        `}
+                      >
+                        {title}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* File Upload with Drag and Drop */}
