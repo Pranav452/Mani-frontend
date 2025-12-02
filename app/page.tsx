@@ -1,65 +1,162 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
+export default function LoginPage() {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    router.push("/cities");
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the sexy body
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-screen flex bg-white">
+      {/* Left Panel - Stacked Images */}
+      <div className="hidden lg:flex lg:w-150 flex-col relative">
+        {/* Black overlay covers all stacked images */}
+        <div className="absolute inset-0 z-10 bg-black/40 pointer-events-none rounded-br-3xl rounded-tr-3xl" />
+        <div className="flex-1 relative overflow-hidden">
+          <Image
+            src="/1.jpg"
+            alt="Shipping"
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent rounded-br-3xl" />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <div className="flex-1 relative overflow-hidden">
+          <Image
+            src="/2.jpg"
+            alt="Transportation"
+            fill
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
         </div>
-      </main>
+        <div className="flex-1 relative overflow-hidden">
+          <Image
+            src="/3.jpg"
+            alt="Logistics"
+            fill
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent rounded-tr-3xl" />
+        </div>
+      </div>
+
+      {/* Right Panel - Login Form */}
+      <div className="flex-1 flex flex-col">
+        {/* Login Form */}
+        <div className="flex-1 flex items-center justify-center p-6 sm:p-8 md:p-12">
+          <div className="w-full max-w-md">
+            {/* Company Logo and Name */}
+            <div className="flex items-center gap-3 mb-8">
+              <div className="w-10 h-10 flex items-center justify-center">
+                <svg
+                  viewBox="0 0 40 40"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-full h-full"
+                >
+                  <path
+                    d="M10 10 L20 5 L30 10 L30 20 L20 25 L10 20 Z M10 20 L20 15 L30 20 L30 30 L20 35 L10 30 Z"
+                    stroke="#2563eb"
+                    strokeWidth="2"
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+              <h1 className="text-gray-900 text-xl font-semibold">Manilal Patel Group</h1>
+            </div>
+
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">
+              Login
+            </h2>
+            <p className="text-gray-600 mb-8">
+              Sign in to access your account
+            </p>
+            
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Email
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  placeholder="youremail@email.com"
+                  required
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Password
+                </label>
+                <div className="relative">
+                  <input
+                    id="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all pr-12"
+                    placeholder="Enter your password"
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full py-3 bg-gray-900 hover:bg-gray-800 text-white font-semibold rounded-lg transition-all duration-200 shadow-sm hover:shadow-md"
+              >
+                Continue
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
