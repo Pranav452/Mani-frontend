@@ -122,9 +122,12 @@ export default function EDocPage() {
 
   const handleJobNumberSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Job Number submitted:", jobNumber);
     setIsJobNumberModalOpen(false);
+    const jobNum = jobNumber;
     setJobNumber("");
+    router.push(
+      `/companies/${encodeURIComponent(city)}/modules/e-doc/export?jobNumber=${encodeURIComponent(jobNum)}`
+    );
   };
 
   return (
