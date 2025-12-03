@@ -116,7 +116,7 @@ export default function EDocPage() {
     if (moduleName === "Export") {
       setIsJobNumberModalOpen(true);
     } else {
-      console.log(`Navigating to ${moduleName} module`);
+    console.log(`Navigating to ${moduleName} module`);
     }
   };
 
@@ -179,7 +179,7 @@ export default function EDocPage() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 p-6 sm:p-8 max-w-7xl mx-auto w-full">
+      <main className="flex-1 p-6 sm:p-8 max-w-7xl mx-auto w-full overflow-y-auto">
         {/* Welcome Section */}
         <div className="mb-8">
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
