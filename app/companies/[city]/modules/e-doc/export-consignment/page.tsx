@@ -43,6 +43,97 @@ const consignmentNestedSubMenus = [
   { name: "Add New Job", icon: "play" },
 ];
 
+// Dummy data for dropdowns
+const modeOptions = [
+  "Sea Freight",
+  "Air Freight",
+  "Road Transport",
+  "Rail Transport",
+  "Express Delivery",
+  "Courier Service",
+];
+
+const agentOptions = [
+  "ABC Shipping Agents Pvt. Ltd.",
+  "Global Logistics Solutions",
+  "Maritime Forwarding Co.",
+  "Ocean Express Services",
+  "Trade Link International",
+  "Cargo Masters Ltd.",
+  "Shipping Partners Inc.",
+  "Freight Forwarders Group",
+];
+
+const subAgentOptions = [
+  "Sub Agent Alpha",
+  "Sub Agent Beta",
+  "Sub Agent Gamma",
+  "Sub Agent Delta",
+  "Sub Agent Epsilon",
+  "Sub Agent Zeta",
+];
+
+const consigneeOptions = [
+  "Tech Solutions International",
+  "Global Trading Corporation",
+  "Merchant Exporters Ltd.",
+  "International Commerce Inc.",
+  "Trade Partners Worldwide",
+  "Export Import Associates",
+  "Commercial Trading Co.",
+  "Business Solutions Group",
+];
+
+const bankOptions = [
+  "State Bank of India",
+  "HDFC Bank",
+  "ICICI Bank",
+  "Axis Bank",
+  "Punjab National Bank",
+  "Bank of Baroda",
+  "Canara Bank",
+  "Union Bank of India",
+];
+
+const vesselOptions = [
+  "WAN HAI 377",
+  "MSC TAVVISHI",
+  "GEORGE WASHINGTON BRIDGE",
+  "SM MANAL",
+  "MSC INGRID",
+  "LOA PEACE",
+  "CMA CGM GLOBAL",
+  "MSC GABON",
+  "OOCL TAIPEI",
+  "MPC",
+  "JOLLY ORO",
+  "CLEMENTINE MAERSK",
+];
+
+const exporterShipperOptions = [
+  "AQUAPHARM CHEMICAL LIMITED",
+  "Pharma Export Solutions",
+  "Chemical Industries Ltd.",
+  "Global Pharma Exports",
+  "Medicinal Products Corp.",
+];
+
+const billToOptions = [
+  "ABC Trading Company",
+  "XYZ Importers Ltd.",
+  "International Buyers Inc.",
+  "Trade Partners Co.",
+  "Commercial Associates",
+];
+
+const manufacturerOptions = [
+  "Manufacturing Solutions Pvt. Ltd.",
+  "Production Industries",
+  "Factory Works Inc.",
+  "Industrial Manufacturing Co.",
+  "Manufacturing Partners Ltd.",
+];
+
 const getIcon = (iconType: string) => {
   const icons: Record<string, React.ReactElement> = {
     users: (
@@ -118,22 +209,22 @@ export default function ExportConsignmentPage() {
     }
   };
   
-  // Form state
+  // Form state with pre-filled dummy data
   const [formData, setFormData] = useState({
     modeType: "Exporter/Shipper",
-    mode: "",
-    exporterShipper: "",
-    billTo: "",
-    manufacturer: "",
-    agent: "",
-    subAgent: "",
+    mode: "Sea Freight",
+    exporterShipper: "AQUAPHARM CHEMICAL LIMITED",
+    billTo: "ABC Trading Company",
+    manufacturer: "Manufacturing Solutions Pvt. Ltd.",
+    agent: "ABC Shipping Agents Pvt. Ltd.",
+    subAgent: "Sub Agent Alpha",
     notifySame: false,
     consigneeBuyer: "Consignee",
-    consignee: "",
-    buyerName: "",
-    consignedToBank: "",
+    consignee: "Tech Solutions International",
+    buyerName: "International Buyers Inc.",
+    consignedToBank: "State Bank of India",
     modeOfShipment: "Docks/Godown Stuffing",
-    vesselName: "",
+    vesselName: "WAN HAI 377",
   });
 
   const handleInputChange = (field: string, value: string | boolean) => {
@@ -149,19 +240,19 @@ export default function ExportConsignmentPage() {
   const handleReset = () => {
     setFormData({
       modeType: "Exporter/Shipper",
-      mode: "",
-      exporterShipper: "",
-      billTo: "",
-      manufacturer: "",
-      agent: "",
-      subAgent: "",
+      mode: "Sea Freight",
+      exporterShipper: "AQUAPHARM CHEMICAL LIMITED",
+      billTo: "ABC Trading Company",
+      manufacturer: "Manufacturing Solutions Pvt. Ltd.",
+      agent: "ABC Shipping Agents Pvt. Ltd.",
+      subAgent: "Sub Agent Alpha",
       notifySame: false,
       consigneeBuyer: "Consignee",
-      consignee: "",
-      buyerName: "",
-      consignedToBank: "",
+      consignee: "Tech Solutions International",
+      buyerName: "International Buyers Inc.",
+      consignedToBank: "State Bank of India",
       modeOfShipment: "Docks/Godown Stuffing",
-      vesselName: "",
+      vesselName: "WAN HAI 377",
     });
   };
 
@@ -462,6 +553,11 @@ export default function ExportConsignmentPage() {
                           className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         >
                           <option value="">--Select--</option>
+                          {modeOptions.map((option) => (
+                            <option key={option} value={option}>
+                              {option}
+                            </option>
+                          ))}
                         </select>
                       </div>
 
@@ -470,13 +566,20 @@ export default function ExportConsignmentPage() {
                           <Label htmlFor="exporterShipper" className="text-sm font-medium text-gray-700">
                             Exporter/Shipper*
                           </Label>
-                          <Input
+                          <select
                             id="exporterShipper"
                             value={formData.exporterShipper}
                             onChange={(e) => handleInputChange("exporterShipper", e.target.value)}
-                            className="mt-1"
+                            className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             required
-                          />
+                          >
+                            <option value="">--Select--</option>
+                            {exporterShipperOptions.map((option) => (
+                              <option key={option} value={option}>
+                                {option}
+                              </option>
+                            ))}
+                          </select>
                         </div>
                       )}
 
@@ -485,13 +588,20 @@ export default function ExportConsignmentPage() {
                           <Label htmlFor="billTo" className="text-sm font-medium text-gray-700">
                             Bill To*
                           </Label>
-                          <Input
+                          <select
                             id="billTo"
                             value={formData.billTo}
                             onChange={(e) => handleInputChange("billTo", e.target.value)}
-                            className="mt-1"
+                            className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             required
-                          />
+                          >
+                            <option value="">--Select--</option>
+                            {billToOptions.map((option) => (
+                              <option key={option} value={option}>
+                                {option}
+                              </option>
+                            ))}
+                          </select>
                         </div>
                       )}
 
@@ -500,12 +610,19 @@ export default function ExportConsignmentPage() {
                           <Label htmlFor="manufacturer" className="text-sm font-medium text-gray-700">
                             Manufacturer
                           </Label>
-                          <Input
+                          <select
                             id="manufacturer"
                             value={formData.manufacturer}
                             onChange={(e) => handleInputChange("manufacturer", e.target.value)}
-                            className="mt-1"
-                          />
+                            className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          >
+                            <option value="">--Select--</option>
+                            {manufacturerOptions.map((option) => (
+                              <option key={option} value={option}>
+                                {option}
+                              </option>
+                            ))}
+                          </select>
                         </div>
                       )}
                     </div>
@@ -522,6 +639,11 @@ export default function ExportConsignmentPage() {
                           className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         >
                           <option value="">--Select--</option>
+                          {agentOptions.map((option) => (
+                            <option key={option} value={option}>
+                              {option}
+                            </option>
+                          ))}
                         </select>
                       </div>
 
@@ -536,6 +658,11 @@ export default function ExportConsignmentPage() {
                           className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         >
                           <option value="">--Select--</option>
+                          {subAgentOptions.map((option) => (
+                            <option key={option} value={option}>
+                              {option}
+                            </option>
+                          ))}
                         </select>
                       </div>
                     </div>
@@ -598,6 +725,11 @@ export default function ExportConsignmentPage() {
                             required
                           >
                             <option value="">--Select--</option>
+                            {consigneeOptions.map((option) => (
+                              <option key={option} value={option}>
+                                {option}
+                              </option>
+                            ))}
                           </select>
                         </div>
                       )}
@@ -629,6 +761,11 @@ export default function ExportConsignmentPage() {
                           required
                         >
                           <option value="">--Select--</option>
+                          {bankOptions.map((option) => (
+                            <option key={option} value={option}>
+                              {option}
+                            </option>
+                          ))}
                         </select>
                       </div>
                     </div>
@@ -687,6 +824,11 @@ export default function ExportConsignmentPage() {
                       required
                     >
                       <option value="">--Select--</option>
+                      {vesselOptions.map((option) => (
+                        <option key={option} value={option}>
+                          {option}
+                        </option>
+                      ))}
                     </select>
                   </div>
 
