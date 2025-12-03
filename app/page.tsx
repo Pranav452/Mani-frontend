@@ -22,7 +22,7 @@ export default function LoginPage() {
         <div className="absolute inset-0 z-10 bg-black/40 pointer-events-none rounded-br-3xl rounded-tr-3xl" />
         <div className="flex-1 relative overflow-hidden">
           <Image
-            src="/1.jpg"
+            src="/3.webp"
             alt="Shipping"
             fill
             className="object-cover"
@@ -41,7 +41,7 @@ export default function LoginPage() {
         </div>
         <div className="flex-1 relative overflow-hidden">
           <Image
-            src="/3.webp"
+            src="/1.jpg"
             alt="Logistics"
             fill
             className="object-cover"
