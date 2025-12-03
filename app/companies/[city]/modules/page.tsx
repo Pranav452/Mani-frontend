@@ -131,32 +131,25 @@ export default function ModulesPage() {
       {/* Main Content */}
       <div className="flex-1 p-4 sm:p-5 md:p-6">
         <div className="w-full max-w-4xl mx-auto">
-          {/* Back Button Row */}
-          <div className="flex items-center justify-between mb-4">
-            <button
-              onClick={() => router.push(`/companies/${encodeURIComponent(city)}`)}
-              className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors group"
-            >
-              <svg
-                className="w-5 h-5 group-hover:-translate-x-1 transition-transform"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+          {/* Breadcrumbs */}
+          <div className="mb-4">
+            <nav className="flex items-center gap-2 text-sm text-gray-600">
+              <span 
+                className="hover:text-gray-900 cursor-pointer" 
+                onClick={() => router.push("/")}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
-              <span className="text-sm font-medium">Back</span>
-            </button>
-            {city && (
-              <span className="text-gray-900 font-semibold text-sm sm:text-base">
-                {city}
+                Home
               </span>
-            )}
+              <span>/</span>
+              <span 
+                className="hover:text-gray-900 cursor-pointer" 
+                onClick={() => router.push(`/companies/${encodeURIComponent(city)}`)}
+              >
+                {city || "Company"}
+              </span>
+              <span>/</span>
+              <span className="text-gray-900 font-semibold">Modules</span>
+            </nav>
           </div>
 
           {/* Circular Modules Layout */}

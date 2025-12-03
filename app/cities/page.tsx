@@ -88,6 +88,19 @@ export default function CitiesPage() {
       {/* Cities Grid */}
       <div className="p-4 sm:p-5 md:p-6">
         <div className="max-w-7xl mx-auto">
+          {/* Breadcrumbs */}
+          <div className="mb-4">
+            <nav className="flex items-center gap-2 text-sm text-gray-600">
+              <span 
+                className="hover:text-gray-900 cursor-pointer" 
+                onClick={() => router.push("/")}
+              >
+                Home
+              </span>
+              <span>/</span>
+              <span className="text-gray-900 font-semibold">Cities</span>
+            </nav>
+          </div>
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
             Select Your City
           </h2>

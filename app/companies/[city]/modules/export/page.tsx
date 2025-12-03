@@ -568,9 +568,14 @@ export default function ExportModulePage() {
               {/* Breadcrumbs */}
               <div className="mb-6 flex items-center justify-between">
                 <nav className="flex items-center gap-2 text-sm text-gray-600">
-                  <span className="hover:text-gray-900 cursor-pointer">Export</span>
+                  <span 
+                    className="hover:text-gray-900 cursor-pointer" 
+                    onClick={() => router.push(`/companies/${encodeURIComponent(city)}/modules`)}
+                  >
+                    Modules
+                  </span>
                   <span>/</span>
-                  <span className="text-gray-900 font-semibold">Home</span>
+                  <span className="text-gray-900 font-semibold">Export</span>
                 </nav>
                 {!rightNavOpen && (
                   <button

@@ -16,6 +16,17 @@ import {
   SidebarMenuItem,
   SidebarProvider,
 } from "@/components/ui/sidebar";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 const eDocModules = [
   { 
@@ -143,12 +154,22 @@ export default function EDocPage() {
   const params = useParams();
   const city = params?.city ? decodeURIComponent(params.city as string) : "";
   const [selectedModule, setSelectedModule] = useState("");
+  const [isJobNumberModalOpen, setIsJobNumberModalOpen] = useState(false);
+  const [jobNumber, setJobNumber] = useState("");
 
   const handleModuleClick = (moduleName: string) => {
     if (moduleName === "Export") {
-      router.push(`/companies/${encodeURIComponent(city)}/modules/e-doc/export`);
+      setIsJobNumberModalOpen(true);
     } else {
       console.log(`Navigating to ${moduleName} module`);
+    }
+  };
+
+  const handleJobNumberSubmit = () => {
+    if (jobNumber.trim()) {
+      router.push(`/companies/${encodeURIComponent(city)}/modules/e-doc/export?jobNumber=${encodeURIComponent(jobNumber.trim())}`);
+      setIsJobNumberModalOpen(false);
+      setJobNumber("");
     }
   };
 
@@ -259,6 +280,19 @@ export default function EDocPage() {
           {/* Main Content */}
           <SidebarInset className="flex flex-col overflow-hidden bg-gray-50">
             <main className="flex-1 overflow-y-auto p-6 sm:p-8 max-w-7xl mx-auto w-full">
+        {/* Breadcrumbs */}
+        <div className="mb-6">
+          <nav className="flex items-center gap-2 text-sm text-gray-600">
+            <span 
+              className="hover:text-gray-900 cursor-pointer" 
+              onClick={() => router.push(`/companies/${encodeURIComponent(city)}/modules`)}
+            >
+              Modules
+            </span>
+            <span>/</span>
+            <span className="text-gray-900 font-semibold">E-Doc</span>
+          </nav>
+        </div>
         {/* Welcome Section */}
         <div className="mb-8">
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
@@ -412,6 +446,64 @@ export default function EDocPage() {
           </SidebarInset>
         </div>
       </SidebarProvider>
+
+      {/* Job Number Modal */}
+      <Dialog open={isJobNumberModalOpen} onOpenChange={setIsJobNumberModalOpen}>
+        <DialogContent className="sm:max-w-[500px] bg-white">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-semibold text-gray-900">
+              Enter Job Number
+            </DialogTitle>
+            <DialogDescription className="text-gray-600">
+              Please enter the job number to proceed to Export Documents
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="jobNumber" className="text-sm font-medium text-gray-700">
+                Job Number <span className="text-red-500">*</span>
+              </Label>
+              <Input
+                id="jobNumber"
+                type="text"
+                value={jobNumber}
+                onChange={(e) => setJobNumber(e.target.value)}
+                placeholder="Enter job number"
+                className="w-full"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && jobNumber.trim()) {
+                    handleJobNumberSubmit();
+                  }
+                }}
+                autoFocus
+              />
+            </div>
+          </div>
+
+          <DialogFooter className="gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                setIsJobNumberModalOpen(false);
+                setJobNumber("");
+              }}
+              className="border-gray-300 text-gray-700 hover:bg-gray-50"
+            >
+              Cancel
+            </Button>
+            <Button
+              type="button"
+              onClick={handleJobNumberSubmit}
+              disabled={!jobNumber.trim()}
+              className="bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Continue
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

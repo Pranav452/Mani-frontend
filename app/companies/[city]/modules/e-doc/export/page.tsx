@@ -275,30 +275,31 @@ function ExportDocumentsPageContent() {
           {/* Main Content */}
           <SidebarInset className="flex flex-col overflow-hidden bg-gray-50">
             <div className="flex-1 overflow-y-auto p-6" style={{ maxHeight: '100%' }}>
-              {/* Back Button Row */}
-              <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
-                <button
-                  onClick={handleBack}
-                  className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors group"
-                >
-                  <svg
-                    className="w-5 h-5 group-hover:-translate-x-1 transition-transform"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
+              {/* Breadcrumbs */}
+              <div className="mb-6 pb-4 border-b border-gray-200">
+                <nav className="flex items-center gap-2 text-sm text-gray-600">
+                  <span 
+                    className="hover:text-gray-900 cursor-pointer" 
+                    onClick={() => router.push(`/companies/${encodeURIComponent(city)}/modules`)}
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 19l-7-7 7-7"
-                    />
-                  </svg>
-                  <span className="text-sm font-medium">Back</span>
-                </button>
-                <div className="text-base font-bold text-gray-900">
-                  E-Document - Export - Document - Consignment - {jobNumber || "Job Number"}
-                </div>
+                    Modules
+                  </span>
+                  <span>/</span>
+                  <span 
+                    className="hover:text-gray-900 cursor-pointer" 
+                    onClick={() => router.push(`/companies/${encodeURIComponent(city)}/modules/e-doc`)}
+                  >
+                    E-Doc
+                  </span>
+                  <span>/</span>
+                  <span className="text-gray-900 font-semibold">Export Documents</span>
+                  {jobNumber && (
+                    <>
+                      <span>/</span>
+                      <span className="text-gray-700">Job {jobNumber}</span>
+                    </>
+                  )}
+                </nav>
               </div>
 
               {/* Sub-header */}
