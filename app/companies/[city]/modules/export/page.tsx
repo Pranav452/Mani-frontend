@@ -27,11 +27,26 @@ import {
 
 const exportMenus = [
   { name: "Master", icon: "users" },
-  { name: "Consignment", icon: "file" },
+  { name: "Consignment", icon: "file", hasSubMenu: true },
   { name: "Shipment Progress", icon: "truck" },
   { name: "Container List", icon: "box" },
   { name: "Print Document", icon: "printer" },
   { name: "Report", icon: "chart" },
+];
+
+const consignmentSubMenus = [
+  { name: "Consignment", icon: "ship", hasSubMenu: true },
+  { name: "PSS", icon: "ticket" },
+  { name: "Branch Job Transfer", icon: "ticket" },
+  { name: "MISC", icon: "ticket", hasSubMenu: true },
+  { name: "Warehouse Job", icon: "ticket" },
+  { name: "Booking", icon: "ticket", hasSubMenu: true },
+];
+
+const consignmentNestedSubMenus = [
+  { name: "Export Master", icon: "play" },
+  { name: "Search", icon: "play" },
+  { name: "Add New Job", icon: "play" },
 ];
 
 const subMenuItems = [
@@ -260,7 +275,17 @@ const getIcon = (iconType: string) => {
     ),
     ship: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21h18M5 21V7l8-4v18m4-18v14m0 0l4-4m-4 4l-4-4" />
+      </svg>
+    ),
+    ticket: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
+      </svg>
+    ),
+    play: (
+      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
       </svg>
     ),
     user: (
@@ -291,6 +316,18 @@ export default function ExportModulePage() {
   const [selectedSubMenu, setSelectedSubMenu] = useState("Vessel Details");
   const [selectedVessel, setSelectedVessel] = useState<string | null>(null);
   const [rightNavOpen, setRightNavOpen] = useState(true);
+  const [consignmentExpanded, setConsignmentExpanded] = useState(true);
+  const [consignmentNestedExpanded, setConsignmentNestedExpanded] = useState(true);
+  
+  const handleNavigation = (menuName: string) => {
+    if (menuName === "Export Master" || menuName === "Add New Job" || menuName === "Consignment") {
+      router.push(`/companies/${encodeURIComponent(city)}/modules/export/consignment`);
+    } else if (menuName === "Search") {
+      router.push(`/companies/${encodeURIComponent(city)}/modules/export/consignment/search`);
+    } else {
+      setSelectedMenu(menuName);
+    }
+  };
 
   const companyName = "Manilal Patel Clearing Forwarding Pvt. Ltd.";
 
@@ -366,22 +403,150 @@ export default function ExportModulePage() {
                   <SidebarMenu>
                     {exportMenus.map((menu) => (
                       <SidebarMenuItem key={menu.name}>
-                        <SidebarMenuButton
-                          onClick={() => setSelectedMenu(menu.name)}
-                          isActive={selectedMenu === menu.name}
-                          className="w-full justify-between cursor-pointer"
-                          type="button"
-                        >
-                          <div className="flex items-center gap-3">
-                            <div className="text-gray-600">
-                              {getIcon(menu.icon)}
+                        {menu.name === "Consignment" ? (
+                          <div>
+                            <div className="flex items-center gap-1">
+                              <button
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  handleNavigation("Consignment");
+                                }}
+                                className={`flex-1 flex items-center gap-3 px-2 py-2 rounded-md text-sm transition-colors cursor-pointer ${
+                                  selectedMenu === menu.name
+                                    ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                                    : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                                }`}
+                                type="button"
+                              >
+                                <div className="text-gray-600">
+                                  {getIcon(menu.icon)}
+                                </div>
+                                <span className="text-sm">{menu.name}</span>
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  setConsignmentExpanded(!consignmentExpanded);
+                                }}
+                                className="px-2 py-2 rounded-md text-sm transition-colors text-gray-500 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                                type="button"
+                                title={consignmentExpanded ? "Hide submenu" : "Show submenu"}
+                              >
+                                <svg 
+                                  className={`w-4 h-4 transition-transform duration-200 ${consignmentExpanded ? 'rotate-90' : ''}`}
+                                  fill="none" 
+                                  stroke="currentColor" 
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                </svg>
+                              </button>
                             </div>
-                            <span className="text-sm">{menu.name}</span>
+                            {consignmentExpanded && (
+                              <div className="ml-4 mt-1 space-y-1 pl-2">
+                                {consignmentSubMenus.map((subMenu) => (
+                                  <div key={subMenu.name}>
+                                    {subMenu.name === "Consignment" ? (
+                                      <>
+                                        <button
+                                          onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            setConsignmentNestedExpanded(!consignmentNestedExpanded);
+                                          }}
+                                          className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
+                                            consignmentNestedExpanded
+                                              ? "bg-gray-50 text-gray-700"
+                                              : "text-gray-700 hover:bg-gray-50"
+                                          }`}
+                                        >
+                                          <div className="text-gray-500">
+                                            {getIcon(subMenu.icon)}
+                                          </div>
+                                          <span>{subMenu.name}</span>
+                                          <svg 
+                                            className={`w-3 h-3 ml-auto transition-transform duration-200 ${consignmentNestedExpanded ? 'rotate-90' : ''}`}
+                                            fill="none" 
+                                            stroke="currentColor" 
+                                            viewBox="0 0 24 24"
+                                          >
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                          </svg>
+                                        </button>
+                                        {consignmentNestedExpanded && (
+                                          <div className="ml-4 mt-1 space-y-1 pl-2">
+                                            {consignmentNestedSubMenus.map((nestedMenu) => (
+                                              <button
+                                                key={nestedMenu.name}
+                                                onClick={(e) => {
+                                                  e.preventDefault();
+                                                  e.stopPropagation();
+                                                  handleNavigation(nestedMenu.name);
+                                                }}
+                                                className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
+                                                  selectedMenu === nestedMenu.name
+                                                    ? "bg-blue-50 text-blue-700"
+                                                    : "text-gray-700 hover:bg-gray-50"
+                                                }`}
+                                              >
+                                                <div className={selectedMenu === nestedMenu.name ? "text-blue-600" : "text-gray-500"}>
+                                                  {getIcon(nestedMenu.icon)}
+                                                </div>
+                                                <span>{nestedMenu.name}</span>
+                                              </button>
+                                            ))}
+                                          </div>
+                                        )}
+                                      </>
+                                    ) : (
+                                      <button
+                                        onClick={(e) => {
+                                          e.preventDefault();
+                                          e.stopPropagation();
+                                          handleNavigation(subMenu.name);
+                                        }}
+                                        className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
+                                          selectedMenu === subMenu.name
+                                            ? "bg-blue-50 text-blue-700"
+                                            : "text-gray-700 hover:bg-gray-50"
+                                        }`}
+                                      >
+                                        <div className={selectedMenu === subMenu.name ? "text-blue-600" : "text-gray-500"}>
+                                          {getIcon(subMenu.icon)}
+                                        </div>
+                                        <span>{subMenu.name}</span>
+                                        {subMenu.hasSubMenu && (
+                                          <svg className="w-3 h-3 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                          </svg>
+                                        )}
+                                      </button>
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
                           </div>
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                          </svg>
-                        </SidebarMenuButton>
+                        ) : (
+                          <SidebarMenuButton
+                            onClick={() => handleNavigation(menu.name)}
+                            isActive={selectedMenu === menu.name}
+                            className="w-full justify-between cursor-pointer"
+                            type="button"
+                          >
+                            <div className="flex items-center gap-3">
+                              <div className="text-gray-600">
+                                {getIcon(menu.icon)}
+                              </div>
+                              <span className="text-sm">{menu.name}</span>
+                            </div>
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
+                          </SidebarMenuButton>
+                        )}
                       </SidebarMenuItem>
                     ))}
                   </SidebarMenu>

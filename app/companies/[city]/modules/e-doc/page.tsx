@@ -4,16 +4,18 @@ import Image from "next/image";
 import { useRouter, useParams } from "next/navigation";
 import { useState } from "react";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarHeader,
+  SidebarInset,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+} from "@/components/ui/sidebar";
 
 const eDocModules = [
   { 
@@ -105,35 +107,65 @@ const stats = [
   { label: "Active Users", value: "156", change: "+8%", trend: "up" },
 ];
 
+const getSidebarIcon = (iconType: string) => {
+  const icons: Record<string, React.ReactElement> = {
+    calculator: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+      </svg>
+    ),
+    box: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+      </svg>
+    ),
+    arrows: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+      </svg>
+    ),
+    users: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+      </svg>
+    ),
+    home: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+      </svg>
+    ),
+  };
+  return icons[iconType] || icons.calculator;
+};
+
 export default function EDocPage() {
   const router = useRouter();
   const params = useParams();
   const city = params?.city ? decodeURIComponent(params.city as string) : "";
-  const [isJobNumberModalOpen, setIsJobNumberModalOpen] = useState(false);
-  const [jobNumber, setJobNumber] = useState("");
+  const [selectedModule, setSelectedModule] = useState("");
 
   const handleModuleClick = (moduleName: string) => {
     if (moduleName === "Export") {
-      setIsJobNumberModalOpen(true);
+      router.push(`/companies/${encodeURIComponent(city)}/modules/e-doc/export`);
     } else {
-    console.log(`Navigating to ${moduleName} module`);
+      console.log(`Navigating to ${moduleName} module`);
     }
   };
 
-  const handleJobNumberSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsJobNumberModalOpen(false);
-    const jobNum = jobNumber;
-    setJobNumber("");
-    router.push(
-      `/companies/${encodeURIComponent(city)}/modules/e-doc/export?jobNumber=${encodeURIComponent(jobNum)}`
-    );
-  };
+  const sidebarMenus = [
+    { name: "Home", icon: "home", path: `/companies/${encodeURIComponent(city)}/modules` },
+    ...eDocModules.map(module => ({
+      name: module.name,
+      icon: module.icon,
+      path: null,
+    })),
+  ];
+
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4 flex items-center justify-between sticky top-0 z-10 shadow-sm">
+      <header className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4 flex items-center justify-between flex-shrink-0 z-20 shadow-sm">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 flex items-center justify-center flex-shrink-0 relative">
             <Image
@@ -178,8 +210,55 @@ export default function EDocPage() {
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="flex-1 p-6 sm:p-8 max-w-7xl mx-auto w-full overflow-y-auto">
+      <SidebarProvider defaultOpen={true}>
+        <div className="flex flex-1 overflow-hidden" style={{ height: 'calc(100vh - 73px)', maxHeight: 'calc(100vh - 73px)' }}>
+          {/* Left Sidebar */}
+          <Sidebar collapsible="none" className="border-r border-gray-200 bg-white flex flex-col">
+            <SidebarHeader className="border-b border-gray-200">
+              <div className="px-4 py-3">
+                <h3 className="text-sm font-semibold text-gray-900">E-Doc Modules</h3>
+              </div>
+            </SidebarHeader>
+            <SidebarContent className="overflow-y-auto flex-1">
+              <SidebarGroup>
+                <SidebarGroupContent>
+                  <SidebarMenu>
+                    {sidebarMenus.map((menu) => (
+                      <SidebarMenuItem key={menu.name}>
+                        <SidebarMenuButton
+                          onClick={() => {
+                            if (menu.path) {
+                              router.push(menu.path);
+                            } else {
+                              setSelectedModule(menu.name);
+                              handleModuleClick(menu.name);
+                            }
+                          }}
+                          isActive={selectedModule === menu.name}
+                          className="w-full justify-start cursor-pointer"
+                          type="button"
+                        >
+                          <div className="text-gray-600">
+                            {getSidebarIcon(menu.icon)}
+                          </div>
+                          <span className="text-sm">{menu.name}</span>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    ))}
+                  </SidebarMenu>
+                </SidebarGroupContent>
+              </SidebarGroup>
+            </SidebarContent>
+            <SidebarFooter className="border-t border-gray-200 p-4 flex-shrink-0">
+              <p className="text-xs text-gray-500 text-center">
+                Version 9.0.30729.1 ©2014 Manilal Patel Group. All Rights Reserved.
+              </p>
+            </SidebarFooter>
+          </Sidebar>
+
+          {/* Main Content */}
+          <SidebarInset className="flex flex-col overflow-hidden bg-gray-50">
+            <main className="flex-1 overflow-y-auto p-6 sm:p-8 max-w-7xl mx-auto w-full">
         {/* Welcome Section */}
         <div className="mb-8">
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
@@ -329,67 +408,10 @@ export default function EDocPage() {
             </div>
           </div>
         </div>
-      </main>
-
-      {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 px-4 sm:px-6 py-4 mt-auto">
-        <div className="max-w-7xl mx-auto">
-          <p className="text-gray-500 text-xs sm:text-sm text-center font-medium">
-            Version 9.0.30729.1 ©2014 Manilal Patel Group. All Rights Reserved.
-          </p>
+            </main>
+          </SidebarInset>
         </div>
-      </footer>
-
-      {/* Add Job Number Modal */}
-      <Dialog open={isJobNumberModalOpen} onOpenChange={setIsJobNumberModalOpen}>
-        <DialogContent className="sm:max-w-[500px] bg-white">
-          <DialogHeader>
-            <DialogTitle className="text-xl font-semibold text-gray-900">
-              Add Job Number
-            </DialogTitle>
-            <DialogDescription className="text-gray-600">
-              Enter the job number for the export document
-            </DialogDescription>
-          </DialogHeader>
-          <form onSubmit={handleJobNumberSubmit}>
-            <div className="space-y-4 py-4">
-              <div className="space-y-2">
-                <Label htmlFor="jobNumber" className="text-sm font-medium text-gray-700">
-                  Job Number
-                </Label>
-                <Input
-                  id="jobNumber"
-                  type="text"
-                  placeholder="Enter job number"
-                  value={jobNumber}
-                  onChange={(e) => setJobNumber(e.target.value)}
-                  className="w-full"
-                  required
-                />
-              </div>
-            </div>
-            <DialogFooter className="gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => {
-                  setIsJobNumberModalOpen(false);
-                  setJobNumber("");
-                }}
-                className="border-gray-300 text-gray-700 hover:bg-gray-50"
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                className="bg-gray-900 hover:bg-gray-800 text-white"
-              >
-                Add Job Number
-              </Button>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
+      </SidebarProvider>
     </div>
   );
 }
