@@ -194,10 +194,12 @@ export default function ExportConsignmentPage() {
   const [selectedSubMenu, setSelectedSubMenu] = useState("Consignment");
   
   const handleNavigation = (menuName: string) => {
-    if (menuName === "Export Master" || menuName === "Add New Job") {
+    if (menuName === "Export Master") {
       setSelectedSubMenu("Consignment");
     } else if (menuName === "Search") {
       router.push(`/companies/${encodeURIComponent(city)}/modules/export/consignment/search`);
+    } else if (menuName === "Add New Job") {
+      router.push(`/companies/${encodeURIComponent(city)}/modules/export/consignment/add-new-job`);
     } else {
       setSelectedSubMenu(menuName);
     }
@@ -361,16 +363,15 @@ export default function ExportConsignmentPage() {
                                           onClick={(e) => {
                                             e.preventDefault();
                                             e.stopPropagation();
-                                            setSelectedSubMenu("Consignment");
                                             setConsignmentNestedExpanded(!consignmentNestedExpanded);
                                           }}
                                           className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
-                                            selectedSubMenu === subMenu.name
-                                              ? "bg-blue-50 text-blue-700"
+                                            consignmentNestedExpanded
+                                              ? "bg-gray-50 text-gray-700"
                                               : "text-gray-700 hover:bg-gray-50"
                                           }`}
                                         >
-                                          <div className={selectedSubMenu === subMenu.name ? "text-blue-600" : "text-gray-500"}>
+                                          <div className="text-gray-500">
                                             {getIcon(subMenu.icon)}
                                           </div>
                                           <span>{subMenu.name}</span>

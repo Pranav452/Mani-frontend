@@ -248,16 +248,15 @@ export default function ExportSearchPage() {
                                           onClick={(e) => {
                                             e.preventDefault();
                                             e.stopPropagation();
-                                            setSelectedSubMenu("Consignment");
                                             setConsignmentNestedExpanded(!consignmentNestedExpanded);
                                           }}
                                           className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
-                                            selectedSubMenu === subMenu.name
-                                              ? "bg-blue-50 text-blue-700"
+                                            consignmentNestedExpanded
+                                              ? "bg-gray-50 text-gray-700"
                                               : "text-gray-700 hover:bg-gray-50"
                                           }`}
                                         >
-                                          <div className={selectedSubMenu === subMenu.name ? "text-blue-600" : "text-gray-500"}>
+                                          <div className="text-gray-500">
                                             {getIcon(subMenu.icon)}
                                           </div>
                                           <span>{subMenu.name}</span>

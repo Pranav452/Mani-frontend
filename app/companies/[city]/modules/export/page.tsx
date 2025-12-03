@@ -320,10 +320,12 @@ export default function ExportModulePage() {
   const [consignmentNestedExpanded, setConsignmentNestedExpanded] = useState(true);
   
   const handleNavigation = (menuName: string) => {
-    if (menuName === "Export Master" || menuName === "Add New Job" || menuName === "Consignment") {
+    if (menuName === "Export Master") {
       router.push(`/companies/${encodeURIComponent(city)}/modules/export/consignment`);
     } else if (menuName === "Search") {
       router.push(`/companies/${encodeURIComponent(city)}/modules/export/consignment/search`);
+    } else if (menuName === "Add New Job") {
+      router.push(`/companies/${encodeURIComponent(city)}/modules/export/consignment/add-new-job`);
     } else {
       setSelectedMenu(menuName);
     }
@@ -405,45 +407,34 @@ export default function ExportModulePage() {
                       <SidebarMenuItem key={menu.name}>
                         {menu.name === "Consignment" ? (
                           <div>
-                            <div className="flex items-center gap-1">
-                              <button
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  e.stopPropagation();
-                                  handleNavigation("Consignment");
-                                }}
-                                className={`flex-1 flex items-center gap-3 px-2 py-2 rounded-md text-sm transition-colors cursor-pointer ${
-                                  selectedMenu === menu.name
-                                    ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                                    : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-                                }`}
-                                type="button"
-                              >
+                            <button
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setConsignmentExpanded(!consignmentExpanded);
+                              }}
+                              className={`w-full flex items-center justify-between gap-3 px-2 py-2 rounded-md text-sm transition-colors cursor-pointer ${
+                                consignmentExpanded
+                                  ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                                  : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                              }`}
+                              type="button"
+                            >
+                              <div className="flex items-center gap-3">
                                 <div className="text-gray-600">
                                   {getIcon(menu.icon)}
                                 </div>
                                 <span className="text-sm">{menu.name}</span>
-                              </button>
-                              <button
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  e.stopPropagation();
-                                  setConsignmentExpanded(!consignmentExpanded);
-                                }}
-                                className="px-2 py-2 rounded-md text-sm transition-colors text-gray-500 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-                                type="button"
-                                title={consignmentExpanded ? "Hide submenu" : "Show submenu"}
+                              </div>
+                              <svg 
+                                className={`w-4 h-4 transition-transform duration-200 ${consignmentExpanded ? 'rotate-90' : ''}`}
+                                fill="none" 
+                                stroke="currentColor" 
+                                viewBox="0 0 24 24"
                               >
-                                <svg 
-                                  className={`w-4 h-4 transition-transform duration-200 ${consignmentExpanded ? 'rotate-90' : ''}`}
-                                  fill="none" 
-                                  stroke="currentColor" 
-                                  viewBox="0 0 24 24"
-                                >
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                </svg>
-                              </button>
-                            </div>
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                              </svg>
+                            </button>
                             {consignmentExpanded && (
                               <div className="ml-4 mt-1 space-y-1 pl-2">
                                 {consignmentSubMenus.map((subMenu) => (

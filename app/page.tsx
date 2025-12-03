@@ -41,7 +41,7 @@ export default function LoginPage() {
         </div>
         <div className="flex-1 relative overflow-hidden">
           <Image
-            src="/3.jpg"
+            src="/3.webp"
             alt="Logistics"
             fill
             className="object-cover"
